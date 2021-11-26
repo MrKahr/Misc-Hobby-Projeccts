@@ -55,9 +55,9 @@ def rowNames(df):
 
 
 # Count the number of observations in each column specified
-def countObs(df, my_list):
+def countObs(df):
     observations = []
-    for element in my_list:
+    for element in df.columns:
         observations.append(df[element].count())
     return observations 
 
@@ -66,17 +66,50 @@ def countObs(df, my_list):
 def createDf(df):
     col_names = ["Variable","Count"]
     var_names = rowNames(df)
-    var_count = countObs(df,var_names)
+    var_count = countObs(df)
     my_df = pd.DataFrame(list(zip(var_names,var_count)), columns = col_names)
     print(f'Column names are: {col_names}\nRow names are {var_names}\nCounts are {var_count}')
     return my_df
 
+# Create dataframe
+new_df = createDf(df)
 
-### numpy and Matplotlib --- Create frequency plot 
+# CREDIT: https://www.statology.org/matplotlib-table/
+# Define ax object
+fig, ax = plt.subplots()
 
-# Create a histogram 
+# Hide axes 
+ax.axis('off')
+ax.axis('tight')
+fig.patch.set_visible(False)
 
-# Create a bargraph 
+# Create table
+table = ax.table(cellText=new_df.values, colLabels=new_df.columns, loc='center')
+
+### numpy and matplotlib 
+
+# Create a simple plot of ticket prices 
+# Define fig and ax object
+fig,ax = plt.subplots()
+plt.plot(df["Fare"], 'ro')
+plt.axis([0,418,0,20])
+plt.xlabel("Index")
+plt.ylabel("Fare in dollars")
+plt.axhline(y = 7.5, linestyle = "--")
+
+
+# Create a histogram of ticket prices
+fig,ax = plt.subplots()
+plt.hist(df["Fare"],bins = 3)
+plt.xlabel("Groups")
+plt.ylabel("Ticket Price")
+
+# Scatterplot 
+fig,ax = plt.subplots()
+ax.set_facecolor('white')
+plt.xlabel("Age")
+plt.ylabel("Ticket Price")
+plt.scatter(df["Age"], df["Fare"], c = df["Pclass"], cmap = "brg_r")
 
 
 
